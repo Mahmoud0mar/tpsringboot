@@ -30,4 +30,26 @@ public class ReservationServiceImpl implements IReservationServices{
     public Reservation retrieveReservation(Long idReservation) {
         return reservationRepository.findById(idReservation).orElse(null);
     }
+    @Override
+public Reservation ajouterReservation(long idBloc, long cinEtudiant) {
+    Etudiant etudiant = etudiantRepository.findByCin(cinEtudiant);
+    Bloc bloc = blocRepository.findById(idBloc).orElse(null);
+
+    if (etudiant != null && bloc != null) {
+        Chambre chambre = chambreRepository.findAvailableChambreInBloc(idBloc);
+
+        if (chambre != null && chambre.getReservations().size() < chambre.getCapaciteMax()) {
+            Reservation reservation = new Reservation();
+            reservation.setNumReservation(chambre.getNumero() + "-" + chambre.getBloc().getNom() + "-" + LocalDate.now().getYear());
+            reservation.setChambre(chambre);
+            reservation.setEtudiant(etudiant);
+            reservation.setEstValide(true);
+            
+            reservationRepository.save(reservation);
+            return reservation;
+        }
+    }
+    return null;
+}
+
 }

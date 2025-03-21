@@ -33,4 +33,27 @@ public class UniversiteServiceImpl implements IUniversiteServices {
 
         return universiteRepository.findById(idUniversite).orElse(null);
     }
+    @Override
+public Universite assignerFoyerAUniversite(Long idUniversite, Long idFoyer) {
+    Universite universite = universiteRepository.findById(idUniversite).orElse(null);
+    Foyer foyer = foyerRepository.findById(idFoyer).orElse(null);
+
+    if (universite != null && foyer != null) {
+        universite.setFoyer(foyer);
+        universiteRepository.save(universite);
+    }
+    return universite;
+}
+
+@Override
+public Universite supprimerFoyerDeUniversite(Long idUniversite) {
+    Universite universite = universiteRepository.findById(idUniversite).orElse(null);
+
+    if (universite != null) {
+        universite.setFoyer(null);
+        universiteRepository.save(universite);
+    }
+    return universite;
+}
+
 }

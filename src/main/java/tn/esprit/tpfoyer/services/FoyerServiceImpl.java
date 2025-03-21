@@ -70,5 +70,40 @@ public class FoyerServiceImpl implements IFoyerServices {
 
         foyerRepository.deleteById(idFoyer);
     }
+    @Override
+public Universite affecterFoyerAUniversite(long idFoyer, String nomUniversite) {
+    Foyer foyer = foyerRepository.findById(idFoyer).orElse(null);
+    Universite universite = universiteRepository.findByNom(nomUniversite);
+
+    if (foyer != null && universite != null) {
+        universite.setFoyer(foyer);
+        universiteRepository.save(universite);
+    }
+    return universite;
+}
+
+@Override
+public Universite desaffecterFoyerAUniversite(long idUniversite) {
+    Universite universite = universiteRepository.findById(idUniversite).orElse(null);
+
+    if (universite != null) {
+        universite.setFoyer(null);
+        universiteRepository.save(universite);
+    }
+    return universite;
+}
+
+@Override
+public Foyer ajouterFoyerEtAffecterAUniversite(Foyer foyer, long idUniversite) {
+    Universite universite = universiteRepository.findById(idUniversite).orElse(null);
+
+    if (universite != null) {
+        foyerRepository.save(foyer);
+        universite.setFoyer(foyer);
+        universiteRepository.save(universite);
+    }
+    return foyer;
+}
+
 
 }

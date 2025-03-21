@@ -41,4 +41,18 @@ public class BlocServiceImpl implements IBlocServices {
         iBlocRepository.deleteById(idBloc);
 
     }
+    @Override
+public Bloc affecterChambresABloc(List<Long> numChambres, long idBloc) {
+    Bloc bloc = blocRepository.findById(idBloc).orElse(null);
+
+    if (bloc != null) {
+        List<Chambre> chambres = chambreRepository.findAllById(numChambres);
+        for (Chambre chambre : chambres) {
+            chambre.setBloc(bloc);
+        }
+        chambreRepository.saveAll(chambres);
+    }
+    return bloc;
+}
+
 }
